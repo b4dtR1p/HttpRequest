@@ -1,0 +1,111 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+'''
+ _   _ _   _        ______                           _
+| | | | | | |       | ___ \                         | |  ®
+| |_| | |_| |_ _ __ | |_/ /___  __ _ _   _  ___  ___| |_
+|  _  | __| __| '_ \|    // _ \/ _` | | | |/ _ \/ __| __|
+| | | | |_| |_| |_) | |\ \  __/ (_| | |_| |  __/\__ \ |_
+\_| |_/\__|\__| .__/\_| \_\___|\__, |\__,_|\___||___/\__|
+              | |                 | |
+              |_|                 |_|
+
+This is a simple http request made in python
+
+Copyright® 2014 Alessandro Pucci - @b4d_tR1p
+
+Date  : February 2014
+Licence : GPL v3 or any later version
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+'''
+
+from __future__ import print_function
+
+__author__ = 'b4d_tR1p - (b4d_tR1p@me.com)'
+__version__ = '0.1'
+__licence__ = 'GPL v3'
+
+
+import sys, socks, socket
+
+# Python 3 compatibility hack
+
+if sys.version_info[:2] >= (3, 0):
+  import urllib.request
+  user_input = input
+  urllib = urllib.request.urlopen
+
+else:
+  import urllib2
+  from urllib2 import urlopen
+  user_input = raw_input
+  urllib = urllib2.urlopen
+
+class HttpRequest(object):
+        def __init__(self, host=None):
+                self.host = host or ''
+
+        def Request(self, tor):
+                if tor == 1:
+                        socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, 'localhost', 9050, True)
+                        socket.socket = socks.socksocket
+                self.host = ('http://www.' + str(user_input('Please enter a host name: ')))
+                r = urllib(self.host)
+                output = r.info()
+                out_file = open("output_request.txt", "w")
+                out_file.write(str(output))
+                out_file.close()
+                print(r.info())
+                print(r.getcode())
+
+
+def choice():
+        choice = int(user_input('Choose your entry here: '))
+        return choice
+
+def main():
+        print('''\n
+
+         _   _ _   _        ______                           _
+        | | | | | | |       | ___ \                         | |  ®
+        | |_| | |_| |_ _ __ | |_/ /___  __ _ _   _  ___  ___| |_
+        |  _  | __| __| '_ \|    // _ \/ _` | | | |/ _ \/ __| __|
+        | | | | |_| |_| |_) | |\ \  __/ (_| | |_| |  __/\__ \ |_
+        \_| |_/\__|\__| .__/\_| \_\___|\__, |\__,_|\___||___/\__|
+                      | |                 | |
+                      |_|                 |_|                   \n
+
+
+        1) HttpRequest
+        2) HttpRequest over Tor proxy
+        3) Exit
+                ''')
+        req = HttpRequest()
+        entry = choice()
+        if entry == 1:
+                req.Request(0)
+        elif entry == 2:
+                req.Request(1)
+        elif entry == 3:
+                print('Tnks for using HttpRequest, bye bye!')
+                sys.exit()
+        else:
+                print('Make sure you get a right entry, like 1, 2 or 3\n')
+                main()
+
+
+if __name__ == '__main__':
+        main()
